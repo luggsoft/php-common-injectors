@@ -1,4 +1,3 @@
-
 # Created by https://www.gitignore.io/api/netbeans,composer
 
 ### Composer ###
@@ -19,3 +18,5 @@ nbdist/
 
 
 # End of https://www.gitignore.io/api/netbeans,composer
+
+*.orig
