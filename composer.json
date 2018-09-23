@@ -1,0 +1,39 @@
+{
+    "name": "crystalcode/php-common-injectors",
+    "type": "library",
+    "homepage": "https://github.com/crystalcodesoftware/php-common-injectors",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dan Lugg",
+            "email": "dan.lugg@gmail.com"
+        }
+    ],
+    "require": {
+        "crystalcode/php-common": "*",
+        "crystalcode/php-common-collections": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7",
+        "composer/composer": "^1.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        },
+        "files": [
+            "/src/**/functions.php"
+        ]
+    },
+    "prefer-stable": true,
+    "config": {
+        "platform": {
+            "php": "5.6.33"
+        }
+    },
+    "scripts": {
+        "pre-autoload-dump": [
+            "CrystalCode\\Php\\Common\\Composer\\GlobFilesAutoloadExtension::extendAutoload"
+        ]
+    }
+}
