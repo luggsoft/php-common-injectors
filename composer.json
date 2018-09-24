@@ -22,6 +22,11 @@
             "": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "": "tests/"
+        }
+    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "repositories": [
