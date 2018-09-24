@@ -25,8 +25,16 @@
             "/src/**/functions.php"
         ]
     },
+    "minimum-stability": "dev",
     "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://satis.dev.crystalcode.io"
+        }
+    ],
     "config": {
+        "secure-http": false,
         "platform": {
             "php": "5.6.33"
         }
