@@ -10,8 +10,8 @@
         }
     ],
     "require": {
-        "crystalcode/php-common": "*",
-        "crystalcode/php-common-collections": "*"
+        "crystalcode/php-common": "dev-develop",
+        "crystalcode/php-common-collections": "dev-develop"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7",
