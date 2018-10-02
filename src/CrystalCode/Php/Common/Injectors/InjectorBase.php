@@ -97,6 +97,7 @@ class InjectorBase implements InjectorInterface
         if (isset($this->definitions[$className])) {
             return $this->definitions[$className]->withValues($values)->withDefinitions($definitions);
         }
+        
         return new Definition($className, $values, $definitions);
     }
 
@@ -117,9 +118,9 @@ class InjectorBase implements InjectorInterface
      */
     final public function withDefinition(DefinitionInterface $definition)
     {
-        $copy = clone $this;
-        $copy->addDefinition($definition);
-        return $copy;
+        $clone = clone $this;
+        $clone->addDefinition($definition);
+        return $clone;
     }
 
     /**
@@ -129,9 +130,9 @@ class InjectorBase implements InjectorInterface
      */
     final public function withDefinitions($definitions)
     {
-        $copy = clone $this;
-        $copy->addDefinitions($definitions);
-        return $copy;
+        $clone = clone $this;
+        $clone->addDefinitions($definitions);
+        return $clone;
     }
 
     /**
