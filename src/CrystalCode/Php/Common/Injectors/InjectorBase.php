@@ -97,7 +97,6 @@ class InjectorBase implements InjectorInterface
         if (isset($this->definitions[$className])) {
             return $this->definitions[$className]->withValues($values)->withDefinitions($definitions);
         }
-        
         return new Definition($className, $values, $definitions);
     }
 

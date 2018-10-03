@@ -2,6 +2,7 @@
 
 namespace CrystalCode\Php\Common\Injectors;
 
+use Exception;
 use ReflectionClass as ClassReflection;
 
 final class InstanceDefinition extends DefinitionBase
@@ -9,26 +10,38 @@ final class InstanceDefinition extends DefinitionBase
 
     /**
      *
-     * @var mixed
+     * @var object
      */
     private $instance;
 
     /**
      *
-     * @param mixed $instance
+     * @param object $instance
+     * @param string $className
      * @return void
      */
-    public function __construct($instance)
+    public function __construct($instance, $className = null)
     {
-        $classReflection = new ClassReflection($instance);
-        parent::__construct($classReflection);
+        if ($className === null) {
+            $classReflection = new ClassReflection($instance);
+            parent::__construct($classReflection);
+        }
+        else {
+            if ($instance instanceof $className) {
+                $classReflection = new ClassReflection($className);
+                parent::__construct($classReflection);
+            }
+            else {
+                throw new Exception();
+            }
+        }
         $this->instance = $instance;
     }
 
     /**
      *
      * @param InjectorInterface $injector
-     * @return mixed
+     * @return object
      */
     protected function getInstance(InjectorInterface $injector)
     {
