@@ -13,8 +13,7 @@ final class InstanceDefinitionDecorator extends DefinitionDecoratorBase
 
     /**
      *
-     * @param InjectorInterface $injector
-     * @return mixed
+     * {@inheritdoc}
      */
     public function resolve(InjectorInterface $injector)
     {

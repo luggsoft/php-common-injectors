@@ -30,8 +30,7 @@ final class AliasDefinition extends DefinitionBase
 
     /**
      *
-     * @param InjectorInterface $injector
-     * @return mixed
+     * {@inheritdoc}
      */
     protected function getInstance(InjectorInterface $injector)
     {

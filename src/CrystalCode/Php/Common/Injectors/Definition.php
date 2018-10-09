@@ -23,8 +23,7 @@ final class Definition extends DefinitionBase
 
     /**
      *
-     * @param InjectorInterface $injector
-     * @return mixed
+     * {@inheritdoc}
      */
     protected function getInstance(InjectorInterface $injector)
     {

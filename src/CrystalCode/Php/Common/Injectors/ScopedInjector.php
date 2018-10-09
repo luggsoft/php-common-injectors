@@ -24,10 +24,7 @@ final class ScopedInjector extends InjectorBase
 
     /**
      * 
-     * @param string $className
-     * @param array $values
-     * @param DefinitionInterface[] $definitions
-     * @return type
+     * {@inheritdoc}
      */
     public function create($className, array $values = [], $definitions = [])
     {

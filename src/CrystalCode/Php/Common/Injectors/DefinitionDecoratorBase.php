@@ -32,7 +32,7 @@ abstract class DefinitionDecoratorBase implements DefinitionInterface
 
     /**
      *
-     * @return string
+     * {@inheritdoc}
      */
     final public function getClassName()
     {
@@ -41,9 +41,7 @@ abstract class DefinitionDecoratorBase implements DefinitionInterface
 
     /**
      *
-     * @param string $name
-     * @param mixed $value
-     * @return DefinitionInterface
+     * {@inheritdoc}
      */
     final public function withValue($name, $value)
     {
@@ -53,8 +51,7 @@ abstract class DefinitionDecoratorBase implements DefinitionInterface
 
     /**
      *
-     * @param array $values
-     * @return DefinitionInterface
+     * {@inheritdoc}
      */
     final public function withValues(array $values)
     {
@@ -64,8 +61,7 @@ abstract class DefinitionDecoratorBase implements DefinitionInterface
 
     /**
      *
-     * @param DefinitionInterface $definition
-     * @return DefinitionInterface
+     * {@inheritdoc}
      */
     final public function withDefinition(DefinitionInterface $definition)
     {
@@ -75,8 +71,7 @@ abstract class DefinitionDecoratorBase implements DefinitionInterface
 
     /**
      *
-     * @param DefinitionInterface[] $definitions
-     * @return DefinitionInterface
+     * {@inheritdoc}
      */
     final public function withDefinitions($definitions)
     {
