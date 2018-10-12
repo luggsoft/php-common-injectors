@@ -18,7 +18,6 @@ final class InstanceDefinition extends DefinitionBase
      *
      * @param object $instance
      * @param string $className
-     * @return void
      */
     public function __construct($instance, $className = null)
     {

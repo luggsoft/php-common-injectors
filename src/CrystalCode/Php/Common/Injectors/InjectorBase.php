@@ -87,10 +87,7 @@ class InjectorBase implements InjectorInterface
 
     /**
      *
-     * @param string $className
-     * @param array $values
-     * @param DefinitionInterface[] $definitions
-     * @return DefinitionInterface
+     * {@inheritdoc}
      */
     final public function getDefinition($className, array $values = [], $definitions = [])
     {
@@ -102,8 +99,7 @@ class InjectorBase implements InjectorInterface
 
     /**
      * 
-     * @param string $className
-     * @return bool
+     * {@inheritdoc}
      */
     final public function hasDefinition($className)
     {
@@ -112,8 +108,7 @@ class InjectorBase implements InjectorInterface
 
     /**
      *
-     * @param DefinitionInterface $definition
-     * @return InjectorInterface
+     * {@inheritdoc}
      */
     final public function withDefinition(DefinitionInterface $definition)
     {
@@ -124,8 +119,7 @@ class InjectorBase implements InjectorInterface
 
     /**
      *
-     * @param DefinitionInterface[] $definitions
-     * @return InjectorInterface
+     * {@inheritdoc}
      */
     final public function withDefinitions($definitions)
     {
@@ -136,10 +130,7 @@ class InjectorBase implements InjectorInterface
 
     /**
      *
-     * @param string $className
-     * @param array $values
-     * @param DefinitionInterface[] $definitions
-     * @return mixed
+     * {@inheritdoc}
      */
     public function create($className, array $values = [], $definitions = [])
     {
@@ -149,10 +140,7 @@ class InjectorBase implements InjectorInterface
 
     /**
      *
-     * @param callable $callable
-     * @param array $values
-     * @param DefinitionInterface[] $definitions
-     * @return mixed
+     * {@inheritdoc}
      */
     public function call(callable $callable, array $values = [], $definitions = [])
     {

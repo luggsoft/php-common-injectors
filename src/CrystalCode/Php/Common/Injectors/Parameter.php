@@ -25,7 +25,7 @@ final class Parameter implements ParameterInterface
 
     /**
      *
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -34,7 +34,7 @@ final class Parameter implements ParameterInterface
 
     /**
      *
-     * @return string
+     * {@inheritdoc}
      */
     public function getClassName()
     {
@@ -47,7 +47,7 @@ final class Parameter implements ParameterInterface
 
     /**
      *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasClassName()
     {
@@ -56,7 +56,7 @@ final class Parameter implements ParameterInterface
 
     /**
      *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getDefaultValue()
     {
@@ -65,7 +65,7 @@ final class Parameter implements ParameterInterface
 
     /**
      *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasDefaultValue()
     {

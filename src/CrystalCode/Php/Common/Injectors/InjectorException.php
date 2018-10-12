@@ -30,10 +30,7 @@ final class InjectorException extends ExceptionBase
 
     /**
      * 
-     * @param type $message
-     * @param type $code
-     * @param Exception $innerException
-     * @return void
+     * {@inheritdoc}
      */
     public function __construct($message = null, $code = null, Exception $innerException = null)
     {

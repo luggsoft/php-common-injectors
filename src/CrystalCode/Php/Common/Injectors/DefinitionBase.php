@@ -46,7 +46,7 @@ abstract class DefinitionBase implements DefinitionInterface
 
     /**
      *
-     * @return string
+     * {@inheritdoc}
      */
     final public function getClassName()
     {
@@ -87,9 +87,7 @@ abstract class DefinitionBase implements DefinitionInterface
 
     /**
      *
-     * @param string $name
-     * @param mixed $value
-     * @return DefinitionInterface
+     * {@inheritdoc}
      */
     final public function withValue($name, $value)
     {
@@ -100,8 +98,7 @@ abstract class DefinitionBase implements DefinitionInterface
 
     /**
      *
-     * @param array $values
-     * @return DefinitionInterface
+     * {@inheritdoc}
      */
     final public function withValues(array $values)
     {
@@ -147,8 +144,7 @@ abstract class DefinitionBase implements DefinitionInterface
 
     /**
      *
-     * @param DefinitionInterface $definition
-     * @return DefinitionInterface
+     * {@inheritdoc}
      */
     final public function withDefinition(DefinitionInterface $definition)
     {
@@ -159,8 +155,7 @@ abstract class DefinitionBase implements DefinitionInterface
 
     /**
      *
-     * @param DefinitionInterface[] $definitions
-     * @return DefinitionInterface
+     * {@inheritdoc}
      */
     final public function withDefinitions($definitions)
     {
@@ -171,8 +166,8 @@ abstract class DefinitionBase implements DefinitionInterface
 
     /**
      *
-     * @param InjectorInterface $injector
-     * @return mixed
+     * {@inheritdoc}
+     * 
      * @throws InjectorException
      */
     final public function resolve(InjectorInterface $injector)
@@ -223,4 +218,5 @@ abstract class DefinitionBase implements DefinitionInterface
      * @return mixed
      */
     abstract protected function getInstance(InjectorInterface $injector);
+
 }
