@@ -2,7 +2,7 @@
 
 namespace CrystalCode\Php\Common\Injectors;
 
-use ReflectionClass as ClassReflection;
+use \ReflectionClass as ClassReflection;
 
 final class CallableDefinition extends DefinitionBase
 {
@@ -18,10 +18,10 @@ final class CallableDefinition extends DefinitionBase
      * @param string $className
      * @param callable $callable
      * @param array $values
-     * @param DefinitionInterface[] $definitions
+     * @param iterable|DefinitionInterface[] $definitions
      * @return void
      */
-    public function __construct($className, callable $callable, array $values = [], $definitions = [])
+    public function __construct(string $className, callable $callable, array $values = [], iterable $definitions = [])
     {
         $classReflection = new ClassReflection($className);
         parent::__construct($classReflection, $values, $definitions);
@@ -32,7 +32,7 @@ final class CallableDefinition extends DefinitionBase
      *
      * {@inheritdoc}
      */
-    protected function getInstance(InjectorInterface $injector)
+    protected function getInstance(InjectorInterface $injector): object
     {
         $values = $this->getValues();
         $definitions = $this->getDefinitions();

@@ -2,10 +2,10 @@
 
 namespace CrystalCode\Php\Common\Injectors;
 
-use CrystalCode\Php\Common\Collections\Collection;
-use CrystalCode\Php\Common\ParameterException;
-use Exception;
-use ReflectionClass as ClassReflection;
+use \CrystalCode\Php\Common\Collections\Collection;
+use \CrystalCode\Php\Common\ParameterException;
+use \Exception;
+use \ReflectionClass as ClassReflection;
 
 abstract class DefinitionBase implements DefinitionInterface
 {
@@ -32,10 +32,10 @@ abstract class DefinitionBase implements DefinitionInterface
      *
      * @param ClassReflection $classReflection
      * @param array $values
-     * @param DefinitionInterface[] $definitions
+     * @param iterable|DefinitionInterface[] $definitions
      * @return void
      */
-    public function __construct(ClassReflection $classReflection, array $values = [], $definitions = [])
+    public function __construct(ClassReflection $classReflection, array $values = [], iterable $definitions = [])
     {
         $this->classReflection = $classReflection;
         foreach ($values as $name => $value) {
@@ -48,7 +48,7 @@ abstract class DefinitionBase implements DefinitionInterface
      *
      * {@inheritdoc}
      */
-    final public function getClassName()
+    final public function getClassName(): string
     {
         return $this->classReflection->getName();
     }
@@ -58,7 +58,7 @@ abstract class DefinitionBase implements DefinitionInterface
      * @param string $name
      * @return mixed
      */
-    final public function getValue($name)
+    final public function getValue(string $name)
     {
         if (isset($this->values[$name])) {
             return $this->values[$name];
@@ -71,7 +71,7 @@ abstract class DefinitionBase implements DefinitionInterface
      * @param string $name
      * @return bool
      */
-    final public function hasValue($name)
+    final public function hasValue(string $name): bool
     {
         return isset($this->values[$name]);
     }
@@ -80,7 +80,7 @@ abstract class DefinitionBase implements DefinitionInterface
      *
      * @return array
      */
-    final public function getValues()
+    final public function getValues(): array
     {
         return $this->values;
     }
@@ -89,18 +89,18 @@ abstract class DefinitionBase implements DefinitionInterface
      *
      * {@inheritdoc}
      */
-    final public function withValue($name, $value)
+    final public function withValue(string $name, $value): DefinitionInterface
     {
-        $copy = clone $this;
-        $copy->values[(string) $name] = $value;
-        return $copy;
+        $clone = clone $this;
+        $clone->values[(string) $name] = $value;
+        return $clone;
     }
 
     /**
      *
      * {@inheritdoc}
      */
-    final public function withValues(array $values)
+    final public function withValues(array $values): DefinitionInterface
     {
         $copy = clone $this;
         foreach ($values as $name => $value) {
@@ -115,7 +115,7 @@ abstract class DefinitionBase implements DefinitionInterface
      * @return DefinitionInterface
      * @throws ParameterException
      */
-    final public function getDefinition($className)
+    final public function getDefinition(string $className): DefinitionInterface
     {
         if (isset($this->definitions[$className])) {
             return $this->definitions[$className];
@@ -128,7 +128,7 @@ abstract class DefinitionBase implements DefinitionInterface
      * @param string $className
      * @return bool
      */
-    final public function hasDefinition($className)
+    final public function hasDefinition(string $className): bool
     {
         return isset($this->definitions[$className]);
     }
@@ -137,7 +137,7 @@ abstract class DefinitionBase implements DefinitionInterface
      *
      * @return array|DefinitionInterface[]
      */
-    final public function getDefinitions()
+    final public function getDefinitions(): iterable
     {
         return array_values($this->definitions);
     }
@@ -146,22 +146,22 @@ abstract class DefinitionBase implements DefinitionInterface
      *
      * {@inheritdoc}
      */
-    final public function withDefinition(DefinitionInterface $definition)
+    final public function withDefinition(DefinitionInterface $definition): DefinitionInterface
     {
-        $copy = clone $this;
-        $copy->addDefinition($definition);
-        return $copy;
+        $clone = clone $this;
+        $clone->addDefinition($definition);
+        return $clone;
     }
 
     /**
      *
      * {@inheritdoc}
      */
-    final public function withDefinitions($definitions)
+    final public function withDefinitions(iterable $definitions): DefinitionInterface
     {
-        $copy = clone $this;
-        $copy->addDefinitions($definitions);
-        return $copy;
+        $clone = clone $this;
+        $clone->addDefinitions($definitions);
+        return $clone;
     }
 
     /**
@@ -170,7 +170,7 @@ abstract class DefinitionBase implements DefinitionInterface
      * 
      * @throws InjectorException
      */
-    final public function resolve(InjectorInterface $injector)
+    final public function resolve(InjectorInterface $injector): object
     {
         try {
             return $this->getInstance($injector);
@@ -185,7 +185,7 @@ abstract class DefinitionBase implements DefinitionInterface
      *
      * @return ClassReflection
      */
-    final protected function getClassReflection()
+    final protected function getClassReflection(): ClassReflection
     {
         return $this->classReflection;
     }
@@ -195,17 +195,17 @@ abstract class DefinitionBase implements DefinitionInterface
      * @param DefinitionInterface $definition
      * @return void
      */
-    private function addDefinition(DefinitionInterface $definition)
+    private function addDefinition(DefinitionInterface $definition): void
     {
         $this->definitions[$definition->getClassName()] = $definition;
     }
 
     /**
      *
-     * @param DefinitionInterface[] $definitions
+     * @param iterable|DefinitionInterface[] $definitions
      * @return void
      */
-    private function addDefinitions($definitions)
+    private function addDefinitions(iterable $definitions): void
     {
         foreach (Collection::create($definitions) as $definition) {
             $this->addDefinition($definition);
@@ -215,8 +215,7 @@ abstract class DefinitionBase implements DefinitionInterface
     /**
      *
      * @param InjectorInterface $injector
-     * @return mixed
+     * @return object
      */
-    abstract protected function getInstance(InjectorInterface $injector);
-
+    abstract protected function getInstance(InjectorInterface $injector): object;
 }

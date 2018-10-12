@@ -9,19 +9,19 @@ interface ParameterInterface
      *
      * @return string
      */
-    function getName();
+    function getName(): string;
 
     /**
      *
      * @return string
      */
-    function getClassName();
+    function getClassName(): string;
 
     /**
      *
      * @return bool
      */
-    function hasClassName();
+    function hasClassName(): bool;
 
     /**
      *
@@ -33,6 +33,5 @@ interface ParameterInterface
      *
      * @return bool
      */
-    function hasDefaultValue();
-
+    function hasDefaultValue(): bool;
 }

@@ -18,10 +18,10 @@ final class AliasDefinition extends DefinitionBase
      * @param string $className
      * @param string $aliasName
      * @param array $values
-     * @param DefinitionInterface[] $definitions
+     * @param iterable|DefinitionInterface[] $definitions
      * @return void
      */
-    public function __construct($className, $aliasName, array $values = [], $definitions = [])
+    public function __construct(string $className, string $aliasName, array $values = [], iterable $definitions = [])
     {
         $classReflection = new ClassReflection($className);
         parent::__construct($classReflection, $values, $definitions);
@@ -32,7 +32,7 @@ final class AliasDefinition extends DefinitionBase
      *
      * {@inheritdoc}
      */
-    protected function getInstance(InjectorInterface $injector)
+    protected function getInstance(InjectorInterface $injector): object
     {
         $aliasName = $this->aliasClassReflection->getName();
         $values = $this->getValues();

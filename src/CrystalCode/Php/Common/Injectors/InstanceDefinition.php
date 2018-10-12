@@ -19,7 +19,7 @@ final class InstanceDefinition extends DefinitionBase
      * @param object $instance
      * @param string $className
      */
-    public function __construct($instance, $className = null)
+    public function __construct(object $instance, string $className = null)
     {
         if ($className === null) {
             $classReflection = new ClassReflection($instance);
@@ -42,7 +42,7 @@ final class InstanceDefinition extends DefinitionBase
      * @param InjectorInterface $injector
      * @return object
      */
-    protected function getInstance(InjectorInterface $injector)
+    protected function getInstance(InjectorInterface $injector):object
     {
         return $this->instance;
     }

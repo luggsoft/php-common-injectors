@@ -2,8 +2,8 @@
 
 namespace CrystalCode\Php\Common\Injectors;
 
-use CrystalCode\Php\Common\ExceptionBase;
-use Exception;
+use \CrystalCode\Php\Common\ExceptionBase;
+use \Throwable;
 
 final class InjectorException extends ExceptionBase
 {
@@ -13,9 +13,9 @@ final class InjectorException extends ExceptionBase
      * @param string $name
      * @return string
      */
-    public static function getParameterInjectionFailedMessage($name)
+    public static function getParameterInjectionFailedMessage(string $name)
     {
-        return sprintf('Failed to inject parameter `%s`', (string) $name);
+        return sprintf('Failed to inject parameter `%s`', $name);
     }
 
     /**
@@ -23,21 +23,21 @@ final class InjectorException extends ExceptionBase
      * @param string $className
      * @return string
      */
-    public static function getDefinitionInjectionFailedMessage($className)
+    public static function getDefinitionInjectionFailedMessage(string $className)
     {
-        return sprintf('Failed to inject definition `%s`', (string) $className);
+        return sprintf('Failed to inject definition `%s`', $className);
     }
 
     /**
      * 
      * {@inheritdoc}
      */
-    public function __construct($message = null, $code = null, Exception $innerException = null)
+    public function __construct(string $message = null, int $code = null, Throwable $previous = null)
     {
         if ($message === null) {
             $message = 'Failed to inject';
         }
-        parent::__construct($message, $code, $innerException);
+        parent::__construct($message, $code, $previous);
     }
 
 }

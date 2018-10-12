@@ -9,7 +9,7 @@ interface DefinitionInterface
      *
      * @return string
      */
-    function getClassName();
+    function getClassName(): string;
 
     /**
      *
@@ -17,34 +17,33 @@ interface DefinitionInterface
      * @param mixed $value
      * @return DefinitionInterface
      */
-    function withValue($name, $value);
+    function withValue(string $name, $value): DefinitionInterface;
 
     /**
      *
      * @param array $values
      * @return DefinitionInterface
      */
-    function withValues(array $values);
+    function withValues(array $values): DefinitionInterface;
 
     /**
      *
      * @param DefinitionInterface $definition
      * @return DefinitionInterface
      */
-    function withDefinition(DefinitionInterface $definition);
+    function withDefinition(DefinitionInterface $definition): DefinitionInterface;
 
     /**
      *
-     * @param DefinitionInterface[] $definitions
+     * @param iterable|DefinitionInterface[] $definitions
      * @return DefinitionInterface
      */
-    function withDefinitions($definitions);
+    function withDefinitions(iterable $definitions): DefinitionInterface;
 
     /**
      *
      * @param InjectorInterface $injector
-     * @return mixed
+     * @return object
      */
-    function resolve(InjectorInterface $injector);
-
+    function resolve(InjectorInterface $injector): object;
 }

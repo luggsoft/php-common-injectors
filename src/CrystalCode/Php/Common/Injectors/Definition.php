@@ -2,8 +2,7 @@
 
 namespace CrystalCode\Php\Common\Injectors;
 
-use Iterator;
-use ReflectionClass as ClassReflection;
+use \ReflectionClass as ClassReflection;
 
 final class Definition extends DefinitionBase
 {
@@ -12,10 +11,10 @@ final class Definition extends DefinitionBase
      *
      * @param string $className
      * @param array $values
-     * @param DefinitionInterface[] $definitions
+     * @param iterable|DefinitionInterface[] $definitions
      * @return void
      */
-    public function __construct($className, array $values = [], $definitions = [])
+    public function __construct(string $className, array $values = [], iterable $definitions = [])
     {
         $classReflection = new ClassReflection($className);
         parent::__construct($classReflection, $values, $definitions);
@@ -25,7 +24,7 @@ final class Definition extends DefinitionBase
      *
      * {@inheritdoc}
      */
-    protected function getInstance(InjectorInterface $injector)
+    protected function getInstance(InjectorInterface $injector): object
     {
         $arguments = [];
         foreach ($this->getParameters() as $parameter) {
@@ -40,9 +39,9 @@ final class Definition extends DefinitionBase
 
     /**
      *
-     * @return Iterator|ParameterInterface[]
+     * @return iterable|ParameterInterface[]
      */
-    private function getParameters()
+    private function getParameters(): iterable
     {
         $classReflection = $this->getClassReflection();
         $callableReflection = $classReflection->getConstructor();

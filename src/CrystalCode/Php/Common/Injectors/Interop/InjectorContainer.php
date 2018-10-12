@@ -28,10 +28,10 @@ final class InjectorContainer implements ContainerInterface
      * 
      * @param type $id
      * @param array $values
-     * @param DefinitionInterface[] $definitions
+     * @param iterable|DefinitionInterface[] $definitions
      * @return mixed
      */
-    public function get($id, array $values = [], $definitions = [])
+    public function get($id, array $values = [], iterable $definitions = []): object
     {
         return $this->injector->create((string) $id, $values, $definitions);
     }
@@ -41,7 +41,7 @@ final class InjectorContainer implements ContainerInterface
      * @param string $id
      * @return bool
      */
-    public function has($id)
+    public function has($id): bool
     {
         return $this->injector->hasDefinition((string) $id);
     }

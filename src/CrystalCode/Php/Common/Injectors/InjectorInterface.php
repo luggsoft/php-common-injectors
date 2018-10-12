@@ -10,46 +10,45 @@ interface InjectorInterface
      * @param string $className
      * @return bool
      */
-    function hasDefinition($className);
+    function hasDefinition(string $className): bool;
 
     /**
      * 
      * @param string $className
      * @param array $values
-     * @param DefinitionInterface[] $definitions
+     * @param iterable|DefinitionInterface[] $definitions
      */
-    function getDefinition($className, array $values = [], $definitions = []);
+    function getDefinition(string $className, array $values = [], iterable $definitions = []): DefinitionInterface;
 
     /**
      *
      * @param DefinitionInterface $definition
      * @return InjectorInterface
      */
-    function withDefinition(DefinitionInterface $definition);
+    function withDefinition(DefinitionInterface $definition): InjectorInterface;
 
     /**
      *
-     * @param DefinitionInterface[] $definitions
+     * @param iterable|DefinitionInterface[] $definitions
      * @return InjectorInterface
      */
-    function withDefinitions($definitions);
+    function withDefinitions(iterable $definitions): InjectorInterface;
 
     /**
      *
      * @param string $className
      * @param array $values
-     * @param DefinitionInterface[] $definitions
+     * @param iterable|DefinitionInterface[] $definitions
      * @return mixed
      */
-    function create($className, array $values = [], $definitions = []);
+    function create(string $className, array $values = [], iterable $definitions = []);
 
     /**
      *
      * @param callable $callable
      * @param array $values
-     * @param DefinitionInterface[] $definitions
+     * @param iterable|DefinitionInterface[] $definitions
      * @return mixed
      */
-    function call(callable $callable, array $values = [], $definitions = []);
-
+    function call(callable $callable, array $values = [], iterable $definitions = []);
 }

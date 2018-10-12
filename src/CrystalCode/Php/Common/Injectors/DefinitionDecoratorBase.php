@@ -25,7 +25,7 @@ abstract class DefinitionDecoratorBase implements DefinitionInterface
      *
      * @return DefinitionInterface
      */
-    final public function getDefinition()
+    final public function getDefinition(): DefinitionInterface
     {
         return $this->definition;
     }
@@ -34,7 +34,7 @@ abstract class DefinitionDecoratorBase implements DefinitionInterface
      *
      * {@inheritdoc}
      */
-    final public function getClassName()
+    final public function getClassName(): string
     {
         return $this->definition->getClassName();
     }
@@ -43,7 +43,7 @@ abstract class DefinitionDecoratorBase implements DefinitionInterface
      *
      * {@inheritdoc}
      */
-    final public function withValue($name, $value)
+    final public function withValue(string $name, $value): DefinitionInterface
     {
         $this->definition = $this->definition->withValue($name, $value);
         return $this;
@@ -53,7 +53,7 @@ abstract class DefinitionDecoratorBase implements DefinitionInterface
      *
      * {@inheritdoc}
      */
-    final public function withValues(array $values)
+    final public function withValues(array $values): DefinitionInterface
     {
         $this->definition = $this->definition->withValues($values);
         return $this;
@@ -63,7 +63,7 @@ abstract class DefinitionDecoratorBase implements DefinitionInterface
      *
      * {@inheritdoc}
      */
-    final public function withDefinition(DefinitionInterface $definition)
+    final public function withDefinition(DefinitionInterface $definition): DefinitionInterface
     {
         $this->definition = $this->definition->withDefinition($definition);
         return $this;
@@ -73,7 +73,7 @@ abstract class DefinitionDecoratorBase implements DefinitionInterface
      *
      * {@inheritdoc}
      */
-    final public function withDefinitions($definitions)
+    final public function withDefinitions(iterable $definitions): DefinitionInterface
     {
         $this->definition = $this->definition->withDefinitions($definitions);
         return $this;

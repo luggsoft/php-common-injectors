@@ -2,13 +2,13 @@
 
 namespace CrystalCode\Php\Common\Injectors;
 
-use Closure;
-use CrystalCode\Php\Common\Collections\Collection;
-use CrystalCode\Php\Common\OperationException;
-use CrystalCode\Php\Common\ParameterException;
-use ReflectionFunction as FunctionCallableReflection;
-use ReflectionFunctionAbstract as CallableReflectionBase;
-use ReflectionMethod as MethodCallableReflection;
+use \Closure;
+use \CrystalCode\Php\Common\Collections\Collection;
+use \CrystalCode\Php\Common\OperationException;
+use \CrystalCode\Php\Common\ParameterException;
+use \ReflectionFunction as FunctionCallableReflection;
+use \ReflectionFunctionAbstract as CallableReflectionBase;
+use \ReflectionMethod as MethodCallableReflection;
 
 class InjectorBase implements InjectorInterface
 {
@@ -55,7 +55,7 @@ class InjectorBase implements InjectorInterface
      * @return CallableReflectionBase
      * @throws ParameterException
      */
-    private static function getCallableReflection(callable $callable)
+    private static function getCallableReflection(callable $callable): CallableReflectionBase
     {
         if (is_string($callable)) {
             return new FunctionCallableReflection($callable);
@@ -77,10 +77,10 @@ class InjectorBase implements InjectorInterface
 
     /**
      *
-     * @param DefinitionInterface[] $definitions
+     * @param iterable|DefinitionInterface[] $definitions
      * @return void
      */
-    public function __construct($definitions = [])
+    public function __construct(iterable $definitions = [])
     {
         $this->addDefinitions($definitions);
     }
@@ -89,7 +89,7 @@ class InjectorBase implements InjectorInterface
      *
      * {@inheritdoc}
      */
-    final public function getDefinition($className, array $values = [], $definitions = [])
+    final public function getDefinition(string $className, array $values = [], iterable $definitions = []): DefinitionInterface
     {
         if (isset($this->definitions[$className])) {
             return $this->definitions[$className]->withValues($values)->withDefinitions($definitions);
@@ -101,7 +101,7 @@ class InjectorBase implements InjectorInterface
      * 
      * {@inheritdoc}
      */
-    final public function hasDefinition($className)
+    final public function hasDefinition(string $className): bool
     {
         return isset($this->definitions[$className]);
     }
@@ -110,7 +110,7 @@ class InjectorBase implements InjectorInterface
      *
      * {@inheritdoc}
      */
-    final public function withDefinition(DefinitionInterface $definition)
+    final public function withDefinition(DefinitionInterface $definition): InjectorInterface
     {
         $clone = clone $this;
         $clone->addDefinition($definition);
@@ -121,7 +121,7 @@ class InjectorBase implements InjectorInterface
      *
      * {@inheritdoc}
      */
-    final public function withDefinitions($definitions)
+    final public function withDefinitions(iterable $definitions): InjectorInterface
     {
         $clone = clone $this;
         $clone->addDefinitions($definitions);
@@ -132,7 +132,7 @@ class InjectorBase implements InjectorInterface
      *
      * {@inheritdoc}
      */
-    public function create($className, array $values = [], $definitions = [])
+    public function create(string $className, array $values = [], iterable $definitions = [])
     {
         $definition = $this->getDefinition($className, $values, $definitions);
         return $definition->resolve($this);
@@ -142,7 +142,7 @@ class InjectorBase implements InjectorInterface
      *
      * {@inheritdoc}
      */
-    public function call(callable $callable, array $values = [], $definitions = [])
+    public function call(callable $callable, array $values = [], iterable $definitions = [])
     {
         $arguments = [];
         foreach (static::getCallableReflection($callable)->getParameters() as $parameterReflection) {
@@ -156,11 +156,11 @@ class InjectorBase implements InjectorInterface
      *
      * @param ParameterInterface $parameter
      * @param array $values
-     * @param DefinitionInterface[] $definitions
+     * @param iterable|DefinitionInterface[] $definitions
      * @return mixed
      * @throws InjectorException
      */
-    private function resolveParameter(ParameterInterface $parameter, array $values, $definitions)
+    private function resolveParameter(ParameterInterface $parameter, array $values, iterable $definitions)
     {
         $name = $parameter->getName();
         if (isset($values[$name])) {
@@ -181,17 +181,17 @@ class InjectorBase implements InjectorInterface
      * @param DefinitionInterface $definition
      * @return void
      */
-    final protected function addDefinition(DefinitionInterface $definition)
+    final protected function addDefinition(DefinitionInterface $definition): void
     {
         $this->definitions[$definition->getClassName()] = $definition;
     }
 
     /**
      *
-     * @param DefinitionInterface[] $definitions
+     * @param iterable|DefinitionInterface[] $definitions
      * @return void
      */
-    final protected function addDefinitions($definitions)
+    final protected function addDefinitions($definitions): void
     {
         foreach (Collection::create($definitions) as $definition) {
             $this->addDefinition($definition);
