@@ -10,11 +10,11 @@
         }
     ],
     "require": {
-        "crystalcode/php-common": "dev-develop",
-        "crystalcode/php-common-collections": "dev-develop"
+        "crystalcode/php-common": "dev-develop-php7",
+        "crystalcode/php-common-collections": "dev-develop-php7"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.7",
+        "phpunit/phpunit": "^7.4",
         "composer/composer": "^1.7"
     },
     "autoload": {
@@ -36,9 +36,6 @@
         }
     ],
     "config": {
-        "secure-http": false,
-        "platform": {
-            "php": "5.6.33"
-        }
+        "secure-http": false
     }
 }
