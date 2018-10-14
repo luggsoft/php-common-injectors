@@ -2,7 +2,7 @@
 
 namespace CrystalCode\Php\Common\Injectors;
 
-use \ReflectionClass as ClassReflection;
+use ReflectionClass as ClassReflection;
 
 final class Definition extends DefinitionBase
 {

@@ -46,4 +46,5 @@ interface DefinitionInterface
      * @return object
      */
     function resolve(InjectorInterface $injector): object;
+
 }

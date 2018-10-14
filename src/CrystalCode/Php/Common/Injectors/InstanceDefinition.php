@@ -42,7 +42,7 @@ final class InstanceDefinition extends DefinitionBase
      * @param InjectorInterface $injector
      * @return object
      */
-    protected function getInstance(InjectorInterface $injector):object
+    protected function getInstance(InjectorInterface $injector): object
     {
         return $this->instance;
     }

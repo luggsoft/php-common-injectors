@@ -2,10 +2,10 @@
 
 namespace CrystalCode\Php\Common\Injectors;
 
-use \CrystalCode\Php\Common\Collections\Collection;
-use \CrystalCode\Php\Common\ParameterException;
-use \Exception;
-use \ReflectionClass as ClassReflection;
+use CrystalCode\Php\Common\Collections\Collection;
+use CrystalCode\Php\Common\ParameterException;
+use Exception;
+use ReflectionClass as ClassReflection;
 
 abstract class DefinitionBase implements DefinitionInterface
 {
@@ -218,4 +218,5 @@ abstract class DefinitionBase implements DefinitionInterface
      * @return object
      */
     abstract protected function getInstance(InjectorInterface $injector): object;
+
 }

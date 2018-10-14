@@ -2,8 +2,8 @@
 
 namespace CrystalCode\Php\Common\Injectors;
 
-use \CrystalCode\Php\Common\ExceptionBase;
-use \Throwable;
+use CrystalCode\Php\Common\ExceptionBase;
+use Throwable;
 
 final class InjectorException extends ExceptionBase
 {

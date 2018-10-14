@@ -4,7 +4,6 @@ require_once sprintf('%s/../vendor/autoload.php', __DIR__);
 
 call_user_func(function () {
     $root = sprintf('%s/../src', __DIR__);
-
     foreach (find_all($root) as $path) {
         require_once $path;
     }

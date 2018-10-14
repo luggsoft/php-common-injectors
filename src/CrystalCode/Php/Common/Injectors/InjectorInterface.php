@@ -51,4 +51,5 @@ interface InjectorInterface
      * @return mixed
      */
     function call(callable $callable, array $values = [], iterable $definitions = []);
+
 }

@@ -2,13 +2,13 @@
 
 namespace CrystalCode\Php\Common\Injectors;
 
-use \Closure;
-use \CrystalCode\Php\Common\Collections\Collection;
-use \CrystalCode\Php\Common\OperationException;
-use \CrystalCode\Php\Common\ParameterException;
-use \ReflectionFunction as FunctionCallableReflection;
-use \ReflectionFunctionAbstract as CallableReflectionBase;
-use \ReflectionMethod as MethodCallableReflection;
+use Closure;
+use CrystalCode\Php\Common\Collections\Collection;
+use CrystalCode\Php\Common\OperationException;
+use CrystalCode\Php\Common\ParameterException;
+use ReflectionFunction as FunctionCallableReflection;
+use ReflectionFunctionAbstract as CallableReflectionBase;
+use ReflectionMethod as MethodCallableReflection;
 
 class InjectorBase implements InjectorInterface
 {
