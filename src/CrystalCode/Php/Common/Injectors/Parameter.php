@@ -33,15 +33,26 @@ final class Parameter implements ParameterInterface
     }
 
     /**
+     * 
+     * {@inheritdoc}
+     */
+    public function getIndex(): int
+    {
+        return $this->parameterReflection->getPosition();
+    }
+
+    /**
      *
      * {@inheritdoc}
      */
     public function getClassName(): string
     {
         $classReflection = $this->parameterReflection->getClass();
+
         if ($classReflection === null) {
             return null;
         }
+
         return $classReflection->getName();
     }
 
@@ -70,6 +81,15 @@ final class Parameter implements ParameterInterface
     public function hasDefaultValue(): bool
     {
         return $this->parameterReflection->isDefaultValueAvailable();
+    }
+
+    /**
+     * 
+     * {@inheritdoc}
+     */
+    public function tryResolveArgument(ArgumentInterface $argument, &$value = null): bool
+    {
+        return $argument->tryResolveParameter($this, $value);
     }
 
 }

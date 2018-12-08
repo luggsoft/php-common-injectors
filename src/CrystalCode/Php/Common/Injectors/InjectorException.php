@@ -37,6 +37,7 @@ final class InjectorException extends ExceptionBase
         if ($message === null) {
             $message = 'Failed to inject';
         }
+
         parent::__construct($message, $code, $previous);
     }
 

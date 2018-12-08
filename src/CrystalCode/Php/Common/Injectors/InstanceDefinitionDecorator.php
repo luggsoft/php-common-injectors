@@ -7,7 +7,7 @@ final class InstanceDefinitionDecorator extends DefinitionDecoratorBase
 
     /**
      *
-     * @var mixed
+     * @var object
      */
     private $instance;
 
@@ -21,6 +21,7 @@ final class InstanceDefinitionDecorator extends DefinitionDecoratorBase
             $definition = $this->getDefinition();
             $this->instance = $definition->resolve($injector);
         }
+
         return $this->instance;
     }
 

@@ -26,12 +26,13 @@ final class ScopedInjector extends InjectorBase
      * 
      * {@inheritdoc}
      */
-    public function create($className, array $values = [], iterable $definitions = []): object
+    public function create($className, iterable $arguments = [], iterable $definitions = []): object
     {
         if ($this->hasDefinition($className)) {
-            return parent::create($className, $values, $definitions);
+            return parent::create($className, $arguments, $definitions);
         }
-        return $this->injector->create($className, $values, $definitions);
+        
+        return $this->injector->create($className, $arguments, $definitions);
     }
 
 }

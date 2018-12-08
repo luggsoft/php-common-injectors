@@ -12,33 +12,30 @@ interface DefinitionInterface
     function getClassName(): string;
 
     /**
-     *
-     * @param string $name
-     * @param mixed $value
-     * @return DefinitionInterface
+     * 
+     * @return iterable|ArgumentInterface[]
      */
-    function withValue(string $name, $value): DefinitionInterface;
+    function getArguments(): iterable;
 
     /**
-     *
-     * @param array $values
-     * @return DefinitionInterface
+     * 
+     * @return iterable|DefinitionInterface[]
      */
-    function withValues(array $values): DefinitionInterface;
+    function getDefinitions(): iterable;
 
     /**
-     *
-     * @param DefinitionInterface $definition
+     * 
+     * @param iterable|ArgumentInterface[] $arguments
      * @return DefinitionInterface
      */
-    function withDefinition(DefinitionInterface $definition): DefinitionInterface;
+    function withArguments(ArgumentInterface ...$arguments): DefinitionInterface;
 
     /**
-     *
+     * 
      * @param iterable|DefinitionInterface[] $definitions
      * @return DefinitionInterface
      */
-    function withDefinitions(iterable $definitions): DefinitionInterface;
+    function withDefinitions(DefinitionInterface ...$definitions): DefinitionInterface;
 
     /**
      *

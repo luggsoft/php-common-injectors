@@ -34,6 +34,7 @@ final class InstanceDefinition extends DefinitionBase
                 throw new Exception();
             }
         }
+
         $this->instance = $instance;
     }
 

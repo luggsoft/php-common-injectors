@@ -10,14 +10,13 @@ final class Definition extends DefinitionBase
     /**
      *
      * @param string $className
-     * @param array $values
+     * @param iterable|ArgumentInterface[] $arguments
      * @param iterable|DefinitionInterface[] $definitions
-     * @return void
      */
-    public function __construct(string $className, array $values = [], iterable $definitions = [])
+    public function __construct(string $className, iterable $arguments = [], iterable $definitions = [])
     {
         $classReflection = new ClassReflection($className);
-        parent::__construct($classReflection, $values, $definitions);
+        parent::__construct($classReflection, $arguments, $definitions);
     }
 
     /**
@@ -26,15 +25,19 @@ final class Definition extends DefinitionBase
      */
     protected function getInstance(InjectorInterface $injector): object
     {
-        $arguments = [];
+        $values = [];
+
         foreach ($this->getParameters() as $parameter) {
-            $arguments[] = $this->resolveParameter($parameter, $injector);
+            $values[] = $this->resolveParameter($parameter, $injector);
         }
+
         $classReflection = $this->getClassReflection();
+
         if (!$classReflection->isInstantiable()) {
             throw new InjectorException(sprintf('Definition `%s` is not instantiable', $classReflection->getName()));
         }
-        return $classReflection->newInstanceArgs($arguments);
+
+        return $classReflection->newInstanceArgs($values);
     }
 
     /**
@@ -45,9 +48,11 @@ final class Definition extends DefinitionBase
     {
         $classReflection = $this->getClassReflection();
         $callableReflection = $classReflection->getConstructor();
+
         if ($callableReflection === null) {
             return;
         }
+
         foreach ($callableReflection->getParameters() as $parameterReflection) {
             yield new Parameter($parameterReflection);
         }
@@ -63,20 +68,33 @@ final class Definition extends DefinitionBase
     private function resolveParameter(ParameterInterface $parameter, InjectorInterface $injector)
     {
         $name = $parameter->getName();
-        if ($this->hasValue($name)) {
-            return $this->getValue($name);
+
+        if ($this->hasNamedArgument($name)) {
+            return $this->getNamedArgument($name)->getValue();
         }
+
+        $index = $parameter->getIndex();
+
+        if ($this->hasIndexedArgument($index)) {
+            return $this->getIndexedArgument($index)->getValue();
+        }
+
         if ($parameter->hasClassName()) {
             $className = $parameter->getClassName();
+
             if ($this->hasDefinition($className)) {
                 $definition = $this->getDefinition($className);
+
                 return $definition->resolve($injector);
             }
+
             return $injector->create($className);
         }
+
         if ($parameter->hasDefaultValue()) {
             return $parameter->getDefaultValue();
         }
+
         throw new InjectorException(sprintf('Failed to resolve parameter `%s`', $name));
     }
 

@@ -12,6 +12,12 @@ interface ParameterInterface
     function getName(): string;
 
     /**
+     * 
+     * @return int
+     */
+    function getIndex(): int;
+
+    /**
      *
      * @return string
      */
@@ -34,5 +40,13 @@ interface ParameterInterface
      * @return bool
      */
     function hasDefaultValue(): bool;
+
+    /**
+     * 
+     * @param ArgumentInterface $argument
+     * @param mixed $value
+     * @return bool
+     */
+    function tryResolveArgument(ArgumentInterface $argument, &$value = null): bool;
 
 }

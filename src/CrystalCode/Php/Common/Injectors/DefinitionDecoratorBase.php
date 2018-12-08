@@ -40,12 +40,30 @@ abstract class DefinitionDecoratorBase implements DefinitionInterface
     }
 
     /**
+     * 
+     * {@inheritdoc}
+     */
+    final public function getArguments(): iterable
+    {
+        return $this->definition->getArguments();
+    }
+
+    /**
+     * 
+     * {@inheritdoc}
+     */
+    final public function getDefinitions(): iterable
+    {
+        return $this->definition->getDefinitions();
+    }
+
+    /**
      *
      * {@inheritdoc}
      */
-    final public function withValue(string $name, $value): DefinitionInterface
+    final public function withArguments(ArgumentInterface ...$arguments): DefinitionInterface
     {
-        $this->definition = $this->definition->withValue($name, $value);
+        $this->definition = $this->definition->withArguments($arguments);
         return $this;
     }
 
@@ -53,27 +71,7 @@ abstract class DefinitionDecoratorBase implements DefinitionInterface
      *
      * {@inheritdoc}
      */
-    final public function withValues(array $values): DefinitionInterface
-    {
-        $this->definition = $this->definition->withValues($values);
-        return $this;
-    }
-
-    /**
-     *
-     * {@inheritdoc}
-     */
-    final public function withDefinition(DefinitionInterface $definition): DefinitionInterface
-    {
-        $this->definition = $this->definition->withDefinition($definition);
-        return $this;
-    }
-
-    /**
-     *
-     * {@inheritdoc}
-     */
-    final public function withDefinitions(iterable $definitions): DefinitionInterface
+    final public function withDefinitions(DefinitionInterface ...$definitions): DefinitionInterface
     {
         $this->definition = $this->definition->withDefinitions($definitions);
         return $this;

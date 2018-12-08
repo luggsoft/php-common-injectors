@@ -2,7 +2,6 @@
 
 namespace CrystalCode\Php\Common\Injectors;
 
-use CrystalCode\Php\Common\Collections\Collection;
 use CrystalCode\Php\Common\ParameterException;
 use Exception;
 use ReflectionClass as ClassReflection;
@@ -20,7 +19,7 @@ abstract class DefinitionBase implements DefinitionInterface
      *
      * @var array
      */
-    private $values = [];
+    private $arguments = [];
 
     /**
      *
@@ -31,17 +30,15 @@ abstract class DefinitionBase implements DefinitionInterface
     /**
      *
      * @param ClassReflection $classReflection
-     * @param array $values
+     * @param iterable|ArgumentInterface[] $arguments
      * @param iterable|DefinitionInterface[] $definitions
      * @return void
      */
-    public function __construct(ClassReflection $classReflection, array $values = [], iterable $definitions = [])
+    public function __construct(ClassReflection $classReflection, iterable $arguments = [], iterable $definitions = [])
     {
         $this->classReflection = $classReflection;
-        foreach ($values as $name => $value) {
-            $this->values[(string) $name] = $value;
-        }
-        $this->addDefinitions($definitions);
+        $this->addArguments(...$arguments);
+        $this->addDefinitions(...$definitions);
     }
 
     /**
@@ -55,58 +52,112 @@ abstract class DefinitionBase implements DefinitionInterface
 
     /**
      *
-     * @param string $name
-     * @return mixed
+     * {@inheritdoc}
      */
-    final public function getValue(string $name)
+    final public function getArguments(): iterable
     {
-        if (isset($this->values[$name])) {
-            return $this->values[$name];
-        }
-        return null;
+        return $this->arguments;
     }
 
     /**
-     *
+     * 
+     * @return iterable|NamedArgument[]
+     */
+    final public function getNamedArguments(): iterable
+    {
+        foreach ($this->arguments as $argument) {
+            if ($argument instanceof IndexedArgument) {
+                yield $argument;
+            }
+        }
+    }
+
+    /**
+     * 
+     * @return iterable|IndexedArgument[]
+     */
+    final public function getIndexedArguments(): iterable
+    {
+        foreach ($this->arguments as $argument) {
+            if ($argument instanceof IndexedArgument) {
+                yield $argument;
+            }
+        }
+    }
+
+    /**
+     * 
      * @param string $name
      * @return bool
      */
-    final public function hasValue(string $name): bool
+    final public function hasNamedArgument(string $name): bool
     {
-        return isset($this->values[$name]);
-    }
-
-    /**
-     *
-     * @return array
-     */
-    final public function getValues(): array
-    {
-        return $this->values;
-    }
-
-    /**
-     *
-     * {@inheritdoc}
-     */
-    final public function withValue(string $name, $value): DefinitionInterface
-    {
-        $clone = clone $this;
-        $clone->values[(string) $name] = $value;
-        return $clone;
-    }
-
-    /**
-     *
-     * {@inheritdoc}
-     */
-    final public function withValues(array $values): DefinitionInterface
-    {
-        $copy = clone $this;
-        foreach ($values as $name => $value) {
-            $copy->values[(string) $name] = $value;
+        foreach ($this->getNamedArguments() as $namedArgument) {
+            if ($namedArgument->getName() === $name) {
+                return true;
+            }
         }
-        return $copy;
+
+        return false;
+    }
+
+    /**
+     * 
+     * @param int $index
+     * @return bool
+     */
+    final public function hasIndexedArgument(int $index): bool
+    {
+        foreach ($this->getIndexedArguments() as $indexedArgument) {
+            if ($indexedArgument->getIndex() === $index) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * 
+     * @param string $name
+     * @return NamedArgument
+     * @throws Exception
+     */
+    final public function getNamedArgument(string $name): NamedArgument
+    {
+        foreach ($this->getNamedArguments() as $namedArgument) {
+            if ($namedArgument->getName() === $name) {
+                return $namedArgument;
+            }
+        }
+
+        throw new Exception();
+    }
+
+    /**
+     * 
+     * @param int $index
+     * @return IndexedArgument
+     * @throws Exception
+     */
+    final public function getIndexedArgument(int $index): IndexedArgument
+    {
+        foreach ($this->getIndexedArguments() as $indexedArgument) {
+            if ($indexedArgument->getIndex() === $index) {
+                return $indexedArgument;
+            }
+        }
+
+        throw new Exception();
+    }
+
+    /**
+     *
+     * {@inheritdoc}
+     */
+    final public function getDefinitions(): iterable
+    {
+        return $this->definitions;
     }
 
     /**
@@ -117,9 +168,12 @@ abstract class DefinitionBase implements DefinitionInterface
      */
     final public function getDefinition(string $className): DefinitionInterface
     {
-        if (isset($this->definitions[$className])) {
-            return $this->definitions[$className];
+        foreach ($this->definitions as $definition) {
+            if ($definition->getClassName() === $className) {
+                return $definition;
+            }
         }
+
         throw new ParameterException('className');
     }
 
@@ -130,26 +184,23 @@ abstract class DefinitionBase implements DefinitionInterface
      */
     final public function hasDefinition(string $className): bool
     {
-        return isset($this->definitions[$className]);
-    }
+        foreach ($this->definitions as $definition) {
+            if ($definition->getClassName() === $className) {
+                return true;
+            }
+        }
 
-    /**
-     *
-     * @return array|DefinitionInterface[]
-     */
-    final public function getDefinitions(): iterable
-    {
-        return array_values($this->definitions);
+        return false;
     }
 
     /**
      *
      * {@inheritdoc}
      */
-    final public function withDefinition(DefinitionInterface $definition): DefinitionInterface
+    final public function withArguments(ArgumentInterface ...$arguments): DefinitionInterface
     {
         $clone = clone $this;
-        $clone->addDefinition($definition);
+        $clone->addArguments(...$arguments);
         return $clone;
     }
 
@@ -157,10 +208,10 @@ abstract class DefinitionBase implements DefinitionInterface
      *
      * {@inheritdoc}
      */
-    final public function withDefinitions(iterable $definitions): DefinitionInterface
+    final public function withDefinitions(DefinitionInterface ...$definitions): DefinitionInterface
     {
         $clone = clone $this;
-        $clone->addDefinitions($definitions);
+        $clone->addDefinitions(...$definitions);
         return $clone;
     }
 
@@ -191,13 +242,15 @@ abstract class DefinitionBase implements DefinitionInterface
     }
 
     /**
-     *
-     * @param DefinitionInterface $definition
+     * 
+     * @param iterable|ArgumentInterface[] $arguments
      * @return void
      */
-    private function addDefinition(DefinitionInterface $definition): void
+    private function addArguments(ArgumentInterface ...$arguments): void
     {
-        $this->definitions[$definition->getClassName()] = $definition;
+        foreach ($arguments as $argument) {
+            $this->arguments[] = $argument;
+        }
     }
 
     /**
@@ -205,10 +258,10 @@ abstract class DefinitionBase implements DefinitionInterface
      * @param iterable|DefinitionInterface[] $definitions
      * @return void
      */
-    private function addDefinitions(iterable $definitions): void
+    private function addDefinitions(DefinitionInterface ...$definitions): void
     {
-        foreach (Collection::create($definitions) as $definition) {
-            $this->addDefinition($definition);
+        foreach ($definitions as $definition) {
+            $this->definitions[] = $definition;
         }
     }
 
