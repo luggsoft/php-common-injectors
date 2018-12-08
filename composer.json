@@ -11,8 +11,8 @@
     ],
     "require": {
         "php": "^7.2",
-        "crystalcode/php-common": "dev-develop-php7",
-        "crystalcode/php-common-collections": "dev-develop-php7",
+        "crystalcode/php-common": "dev-master",
+        "crystalcode/php-common-collections": "dev-master",
         "psr/container": "^1.0"
     },
     "require-dev": {
