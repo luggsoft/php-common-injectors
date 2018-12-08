@@ -3,51 +3,12 @@
 namespace CrystalCode\Php\Common\Injectors;
 
 use Closure;
-use CrystalCode\Php\Common\Collections\Collection;
-use CrystalCode\Php\Common\OperationException;
 use CrystalCode\Php\Common\ParameterException;
 use ReflectionFunction as FunctionCallableReflection;
 use ReflectionFunctionAbstract as CallableReflectionBase;
-use ReflectionMethod as MethodCallableReflection;
 
 class InjectorBase implements InjectorInterface
 {
-
-    /**
-     * 
-     * @param callable $callable
-     * @param array $values
-     * @return mixed
-     */
-    final public static function callByName(callable $callable, array $values = [])
-    {
-        $callableReflection = self::getCallableReflection($callable);
-        $arguments = [];
-        foreach ($callableReflection->getParameters() as $parameterReflection) {
-            $parameter = new Parameter($parameterReflection);
-            $arguments[] = self::getParameterValue($values, $parameter);
-        }
-        return call_user_func_array($callable, $arguments);
-    }
-
-    /**
-     * 
-     * @param array $values
-     * @param ParameterInterface $parameter
-     * @return array
-     * @throws OperationException
-     */
-    private static function getParameterValue(array $values, ParameterInterface $parameter)
-    {
-        $name = $parameter->getName();
-        if (array_key_exists($name, $values)) {
-            return $values[$name];
-        }
-        if ($parameter->hasDefaultValue()) {
-            return $parameter->getDefaultValue();
-        }
-        throw new OperationException();
-    }
 
     /**
      *
@@ -55,18 +16,11 @@ class InjectorBase implements InjectorInterface
      * @return CallableReflectionBase
      * @throws ParameterException
      */
-    private static function getCallableReflection(callable $callable)
+    private static function getCallableReflection(callable $callable): CallableReflectionBase
     {
-        if (is_string($callable)) {
-            return new FunctionCallableReflection($callable);
-        }
-        if (is_object($callable) && $callable instanceof Closure) {
-            return new FunctionCallableReflection($callable);
-        }
-        if (is_array($callable) && isset($callable[0], $callable[1])) {
-            return new MethodCallableReflection($callable[0], $callable[1]);
-        }
-        throw new ParameterException('callable');
+        $closure = Closure::fromCallable($callable);
+
+        return new FunctionCallableReflection($closure);
     }
 
     /**
@@ -77,43 +31,60 @@ class InjectorBase implements InjectorInterface
 
     /**
      *
-     * @param DefinitionInterface[] $definitions
-     * @return void
+     * @param iterable|DefinitionInterface[] $definitions
      */
-    public function __construct($definitions = [])
+    public function __construct(iterable $definitions = [])
     {
-        $this->addDefinitions($definitions);
+        $this->addDefinitions(...$definitions);
     }
 
     /**
      *
      * {@inheritdoc}
      */
-    final public function getDefinition($className, array $values = [], $definitions = [])
+    final public function getDefinition(string $className, iterable $arguments = [], iterable $definitions = []): DefinitionInterface
     {
-        if (isset($this->definitions[$className])) {
-            return $this->definitions[$className]->withValues($values)->withDefinitions($definitions);
+        foreach ($this->definitions as $definition) {
+            if ($definition->getClassName() === $className) {
+                return $definition->withArguments(...$arguments)->withDefinitions(...$definitions);
+            }
         }
-        return new Definition($className, $values, $definitions);
+
+        return new Definition($className, $arguments, $definitions);
+    }
+
+    /**
+     * 
+     * @return iterable|DefinitionInterface[]
+     */
+    final public function getDefinitions(): iterable
+    {
+        return $this->definitions;
     }
 
     /**
      * 
      * {@inheritdoc}
      */
-    final public function hasDefinition($className)
+    final public function hasDefinition(string $className): bool
     {
-        return isset($this->definitions[$className]);
+        foreach ($this->definitions as $definition) {
+            if ($definition->getClassName() === $className) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
      *
      * {@inheritdoc}
      */
-    final public function withDefinition(DefinitionInterface $definition)
+    final public function withDefinitions(DefinitionInterface ...$definitions): InjectorInterface
     {
         $clone = clone $this;
-        $clone->addDefinition($definition);
+        $clone->addDefinitions(...$definitions);
         return $clone;
     }
 
@@ -121,20 +92,9 @@ class InjectorBase implements InjectorInterface
      *
      * {@inheritdoc}
      */
-    final public function withDefinitions($definitions)
+    public function create(string $className, iterable $arguments = [], iterable $definitions = [])
     {
-        $clone = clone $this;
-        $clone->addDefinitions($definitions);
-        return $clone;
-    }
-
-    /**
-     *
-     * {@inheritdoc}
-     */
-    public function create($className, array $values = [], $definitions = [])
-    {
-        $definition = $this->getDefinition($className, $values, $definitions);
+        $definition = $this->getDefinition($className, $arguments, $definitions);
         return $definition->resolve($this);
     }
 
@@ -142,59 +102,90 @@ class InjectorBase implements InjectorInterface
      *
      * {@inheritdoc}
      */
-    public function call(callable $callable, array $values = [], $definitions = [])
+    public function call(callable $callable, iterable $arguments = [], iterable $definitions = [])
     {
-        $arguments = [];
+        $values = [];
+
         foreach (static::getCallableReflection($callable)->getParameters() as $parameterReflection) {
             $parameter = new Parameter($parameterReflection);
-            $arguments[] = $this->resolveParameter($parameter, $values, $definitions);
+            $values[] = $this->resolveParameter($parameter, $arguments, $definitions);
         }
-        return call_user_func_array($callable, $arguments);
+
+        return call_user_func_array($callable, $values);
     }
 
     /**
      *
      * @param ParameterInterface $parameter
-     * @param array $values
-     * @param DefinitionInterface[] $definitions
+     * @param iterable|ArgumentInterface[] $arguments
+     * @param iterable|DefinitionInterface[] $definitions
      * @return mixed
      * @throws InjectorException
      */
-    private function resolveParameter(ParameterInterface $parameter, array $values, $definitions)
+    private function resolveParameter(ParameterInterface $parameter, iterable $arguments, iterable $definitions)
     {
-        $name = $parameter->getName();
-        if (isset($values[$name])) {
-            return $values[$name];
+        $value = null;
+
+        if ($this->tryResolveParameterFromArguments($parameter, $arguments, $value)) {
+            return $value;
         }
+
         if ($parameter->hasClassName()) {
             $className = $parameter->getClassName();
             return $this->withDefinitions($definitions)->create($className);
         }
+
         if ($parameter->hasDefaultValue()) {
             return $parameter->getDefaultValue();
         }
+
+        $name = $parameter->getName();
         throw new InjectorException(InjectorException::getParameterInjectionFailedMessage($name), null);
     }
 
     /**
-     *
-     * @param DefinitionInterface $definition
-     * @return void
+     * 
+     * @param ParameterInterface $parameter
+     * @param iterable|ArgumentInterface[] $arguments
+     * @param mixed $value
+     * @return bool
      */
-    final protected function addDefinition(DefinitionInterface $definition)
+    private function tryResolveParameterFromArguments(ParameterInterface $parameter, iterable $arguments, &$value): bool
     {
-        $this->definitions[$definition->getClassName()] = $definition;
+        $name = $parameter->getName();
+
+        foreach ($arguments as $argument) {
+            if ($argument instanceof NamedArgument) {
+                if ($argument->getName() === $name) {
+                    $value = $argument->getValue();
+                    return true;
+                }
+            }
+        }
+
+        $index = $parameter->getIndex();
+
+        foreach ($arguments as $argument) {
+            if ($argument instanceof IndexedArgument) {
+                if ($argument->getIndex() === $index) {
+                    $value = $argument->getValue();
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
      *
-     * @param DefinitionInterface[] $definitions
+     * @param iterable|DefinitionInterface[] $definitions
      * @return void
      */
-    final protected function addDefinitions($definitions)
+    final protected function addDefinitions(DefinitionInterface ...$definitions): void
     {
-        foreach (Collection::create($definitions) as $definition) {
-            $this->addDefinition($definition);
+        foreach ($definitions as $definition) {
+            $this->definitions[] = $definition;
         }
     }
 

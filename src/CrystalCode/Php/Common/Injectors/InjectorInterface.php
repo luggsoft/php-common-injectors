@@ -10,46 +10,39 @@ interface InjectorInterface
      * @param string $className
      * @return bool
      */
-    function hasDefinition($className);
+    function hasDefinition(string $className): bool;
 
     /**
      * 
      * @param string $className
-     * @param array $values
-     * @param DefinitionInterface[] $definitions
+     * @param iterable|ArgumentInterface[] $arguments
+     * @param iterable|DefinitionInterface[] $definitions
      */
-    function getDefinition($className, array $values = [], $definitions = []);
+    function getDefinition(string $className, iterable $arguments = [], iterable $definitions = []): DefinitionInterface;
 
     /**
      *
-     * @param DefinitionInterface $definition
+     * @param iterable|DefinitionInterface[] $definitions
      * @return InjectorInterface
      */
-    function withDefinition(DefinitionInterface $definition);
-
-    /**
-     *
-     * @param DefinitionInterface[] $definitions
-     * @return InjectorInterface
-     */
-    function withDefinitions($definitions);
+    function withDefinitions(DefinitionInterface ...$definitions): InjectorInterface;
 
     /**
      *
      * @param string $className
-     * @param array $values
-     * @param DefinitionInterface[] $definitions
+     * @param iterable|ArgumentInterface[] $arguments
+     * @param iterable|DefinitionInterface[] $definitions
      * @return mixed
      */
-    function create($className, array $values = [], $definitions = []);
+    function create(string $className, iterable $arguments = [], iterable $definitions = []);
 
     /**
      *
      * @param callable $callable
-     * @param array $values
-     * @param DefinitionInterface[] $definitions
+     * @param iterable|ArgumentInterface[] $arguments
+     * @param iterable|DefinitionInterface[] $definitions
      * @return mixed
      */
-    function call(callable $callable, array $values = [], $definitions = []);
+    function call(callable $callable, iterable $arguments = [], iterable $definitions = []);
 
 }

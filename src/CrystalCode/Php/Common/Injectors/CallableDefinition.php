@@ -17,14 +17,14 @@ final class CallableDefinition extends DefinitionBase
      *
      * @param string $className
      * @param callable $callable
-     * @param array $values
-     * @param DefinitionInterface[] $definitions
+     * @param iterable|ArgumentInterface[] $arguments
+     * @param iterable|DefinitionInterface[] $definitions
      * @return void
      */
-    public function __construct($className, callable $callable, array $values = [], $definitions = [])
+    public function __construct(string $className, callable $callable, array $arguments = [], iterable $definitions = [])
     {
         $classReflection = new ClassReflection($className);
-        parent::__construct($classReflection, $values, $definitions);
+        parent::__construct($classReflection, $arguments, $definitions);
         $this->callable = $callable;
     }
 
@@ -32,11 +32,11 @@ final class CallableDefinition extends DefinitionBase
      *
      * {@inheritdoc}
      */
-    protected function getInstance(InjectorInterface $injector)
+    protected function getInstance(InjectorInterface $injector): object
     {
-        $values = $this->getValues();
+        $arguments = $this->getArguments();
         $definitions = $this->getDefinitions();
-        return $injector->call($this->callable, $values, $definitions);
+        return $injector->call($this->callable, $arguments, $definitions);
     }
 
 }

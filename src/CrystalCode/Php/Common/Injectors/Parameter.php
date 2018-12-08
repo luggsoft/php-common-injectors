@@ -27,21 +27,32 @@ final class Parameter implements ParameterInterface
      *
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->parameterReflection->getName();
+    }
+
+    /**
+     * 
+     * {@inheritdoc}
+     */
+    public function getIndex(): int
+    {
+        return $this->parameterReflection->getPosition();
     }
 
     /**
      *
      * {@inheritdoc}
      */
-    public function getClassName()
+    public function getClassName(): string
     {
         $classReflection = $this->parameterReflection->getClass();
+
         if ($classReflection === null) {
             return null;
         }
+
         return $classReflection->getName();
     }
 
@@ -49,7 +60,7 @@ final class Parameter implements ParameterInterface
      *
      * {@inheritdoc}
      */
-    public function hasClassName()
+    public function hasClassName(): bool
     {
         return $this->parameterReflection->getClass() !== null;
     }
@@ -67,9 +78,18 @@ final class Parameter implements ParameterInterface
      *
      * {@inheritdoc}
      */
-    public function hasDefaultValue()
+    public function hasDefaultValue(): bool
     {
         return $this->parameterReflection->isDefaultValueAvailable();
+    }
+
+    /**
+     * 
+     * {@inheritdoc}
+     */
+    public function tryResolveArgument(ArgumentInterface $argument, &$value = null): bool
+    {
+        return $argument->tryResolveParameter($this, $value);
     }
 
 }

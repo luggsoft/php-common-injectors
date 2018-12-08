@@ -7,7 +7,7 @@ final class InstanceDefinitionDecorator extends DefinitionDecoratorBase
 
     /**
      *
-     * @var mixed
+     * @var object
      */
     private $instance;
 
@@ -15,12 +15,13 @@ final class InstanceDefinitionDecorator extends DefinitionDecoratorBase
      *
      * {@inheritdoc}
      */
-    public function resolve(InjectorInterface $injector)
+    public function resolve(InjectorInterface $injector): object
     {
         if ($this->instance === null) {
             $definition = $this->getDefinition();
             $this->instance = $definition->resolve($injector);
         }
+
         return $this->instance;
     }
 
@@ -28,7 +29,7 @@ final class InstanceDefinitionDecorator extends DefinitionDecoratorBase
      *
      * @return void
      */
-    public function clear()
+    public function clear(): void
     {
         $this->instance = null;
     }

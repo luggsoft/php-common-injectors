@@ -9,19 +9,25 @@ interface ParameterInterface
      *
      * @return string
      */
-    function getName();
+    function getName(): string;
+
+    /**
+     * 
+     * @return int
+     */
+    function getIndex(): int;
 
     /**
      *
      * @return string
      */
-    function getClassName();
+    function getClassName(): string;
 
     /**
      *
      * @return bool
      */
-    function hasClassName();
+    function hasClassName(): bool;
 
     /**
      *
@@ -33,6 +39,14 @@ interface ParameterInterface
      *
      * @return bool
      */
-    function hasDefaultValue();
+    function hasDefaultValue(): bool;
+
+    /**
+     * 
+     * @param ArgumentInterface $argument
+     * @param mixed $value
+     * @return bool
+     */
+    function tryResolveArgument(ArgumentInterface $argument, &$value = null): bool;
 
 }

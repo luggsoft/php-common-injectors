@@ -2,6 +2,7 @@
 
 namespace CrystalCode\Php\Common\Injectors\Interop;
 
+use CrystalCode\Php\Common\Injectors\ArgumentInterface;
 use CrystalCode\Php\Common\Injectors\DefinitionInterface;
 use CrystalCode\Php\Common\Injectors\InjectorInterface;
 use Psr\Container\ContainerInterface;
@@ -26,24 +27,31 @@ final class InjectorContainer implements ContainerInterface
 
     /**
      * 
-     * @param type $id
-     * @param array $values
-     * @param DefinitionInterface[] $definitions
-     * @return mixed
+     * {@inheritdoc}
+     * @param iterable|ArgumentInterface[] $arguments
+     * @param iterable|DefinitionInterface[] $definitions
      */
-    public function get($id, array $values = [], $definitions = [])
+    public function get($id, iterable $arguments = [], iterable $definitions = []): object
     {
-        return $this->injector->create((string) $id, $values, $definitions);
+        return $this->injector->create((string) $id, $arguments, $definitions);
     }
 
     /**
      * 
-     * @param string $id
-     * @return bool
+     * {@inheritdoc}
      */
-    public function has($id)
+    public function has($id): bool
     {
         return $this->injector->hasDefinition((string) $id);
+    }
+
+    /**
+     * 
+     * @return InjectorInterface
+     */
+    public function getInjector(): InjectorInterface
+    {
+        return $this->injector;
     }
 
 }

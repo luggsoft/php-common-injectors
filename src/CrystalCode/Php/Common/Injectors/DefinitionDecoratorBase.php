@@ -25,7 +25,7 @@ abstract class DefinitionDecoratorBase implements DefinitionInterface
      *
      * @return DefinitionInterface
      */
-    final public function getDefinition()
+    final public function getDefinition(): DefinitionInterface
     {
         return $this->definition;
     }
@@ -34,18 +34,36 @@ abstract class DefinitionDecoratorBase implements DefinitionInterface
      *
      * {@inheritdoc}
      */
-    final public function getClassName()
+    final public function getClassName(): string
     {
         return $this->definition->getClassName();
     }
 
     /**
+     * 
+     * {@inheritdoc}
+     */
+    final public function getArguments(): iterable
+    {
+        return $this->definition->getArguments();
+    }
+
+    /**
+     * 
+     * {@inheritdoc}
+     */
+    final public function getDefinitions(): iterable
+    {
+        return $this->definition->getDefinitions();
+    }
+
+    /**
      *
      * {@inheritdoc}
      */
-    final public function withValue($name, $value)
+    final public function withArguments(ArgumentInterface ...$arguments): DefinitionInterface
     {
-        $this->definition = $this->definition->withValue($name, $value);
+        $this->definition = $this->definition->withArguments($arguments);
         return $this;
     }
 
@@ -53,27 +71,7 @@ abstract class DefinitionDecoratorBase implements DefinitionInterface
      *
      * {@inheritdoc}
      */
-    final public function withValues(array $values)
-    {
-        $this->definition = $this->definition->withValues($values);
-        return $this;
-    }
-
-    /**
-     *
-     * {@inheritdoc}
-     */
-    final public function withDefinition(DefinitionInterface $definition)
-    {
-        $this->definition = $this->definition->withDefinition($definition);
-        return $this;
-    }
-
-    /**
-     *
-     * {@inheritdoc}
-     */
-    final public function withDefinitions($definitions)
+    final public function withDefinitions(DefinitionInterface ...$definitions): DefinitionInterface
     {
         $this->definition = $this->definition->withDefinitions($definitions);
         return $this;
