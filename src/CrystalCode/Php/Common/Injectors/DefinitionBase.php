@@ -2,7 +2,7 @@
 
 namespace CrystalCode\Php\Common\Injectors;
 
-use CrystalCode\Php\Common\ParameterException;
+use CrystalCode\Php\Common\ArgumentException;
 use Exception;
 use ReflectionClass as ClassReflection;
 
@@ -121,7 +121,7 @@ abstract class DefinitionBase implements DefinitionInterface
      * 
      * @param string $name
      * @return NamedArgument
-     * @throws Exception
+     * @throws ArgumentException
      */
     final public function getNamedArgument(string $name): NamedArgument
     {
@@ -131,7 +131,7 @@ abstract class DefinitionBase implements DefinitionInterface
             }
         }
 
-        throw new Exception();
+        throw new ArgumentException($name);
     }
 
     /**
@@ -148,7 +148,9 @@ abstract class DefinitionBase implements DefinitionInterface
             }
         }
 
-        throw new Exception();
+        $message = vsprintf('No argument found at index %d', [
+            $index,
+        ]);
     }
 
     /**
@@ -164,7 +166,7 @@ abstract class DefinitionBase implements DefinitionInterface
      *
      * @param string $className
      * @return DefinitionInterface
-     * @throws ParameterException
+     * @throws ArgumentException
      */
     final public function getDefinition(string $className): DefinitionInterface
     {
@@ -174,7 +176,7 @@ abstract class DefinitionBase implements DefinitionInterface
             }
         }
 
-        throw new ParameterException('className');
+        throw new ArgumentException('className');
     }
 
     /**
@@ -228,7 +230,8 @@ abstract class DefinitionBase implements DefinitionInterface
         }
         catch (Exception $exception) {
             $className = $this->getClassName();
-            throw new InjectorException(InjectorException::getDefinitionInjectionFailedMessage($className), null, $exception);
+            $message = InjectorException::getDefinitionInjectionFailedMessage($className);
+            throw new InjectorException($message, null, $exception);
         }
     }
 

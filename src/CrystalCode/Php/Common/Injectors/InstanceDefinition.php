@@ -31,7 +31,10 @@ final class InstanceDefinition extends DefinitionBase
                 parent::__construct($classReflection);
             }
             else {
-                throw new Exception();
+                $message = vsprintf('"instance" must be an instance of "%s"', [
+                    $className,
+                ]);
+                throw new ArgumentException('instance', $message);
             }
         }
 

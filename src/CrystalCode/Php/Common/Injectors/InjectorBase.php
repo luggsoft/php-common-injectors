@@ -140,7 +140,8 @@ class InjectorBase implements InjectorInterface
         }
 
         $name = $parameter->getName();
-        throw new InjectorException(InjectorException::getParameterInjectionFailedMessage($name), null);
+        $message = InjectorException::getParameterInjectionFailedMessage($name);
+        throw new InjectorException($message, null);
     }
 
     /**

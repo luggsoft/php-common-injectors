@@ -3,8 +3,8 @@
 namespace CrystalCode\Php\Common\Injectors;
 
 use ArrayIterator;
+use CrystalCode\Php\Common\ArgumentException;
 use IteratorAggregate;
-use TheSeer\Tokenizer\Exception;
 use Traversable;
 
 final class ArgumentSet implements IteratorAggregate
@@ -31,7 +31,7 @@ final class ArgumentSet implements IteratorAggregate
      * @param mixed $key
      * @param mixed $value
      * @return ArgumentInterface
-     * @throws Exception
+     * @throws ArgumentException
      */
     public static function createArgumentFromKeyAndValue($key, $value): ArgumentInterface
     {
@@ -43,7 +43,7 @@ final class ArgumentSet implements IteratorAggregate
             return new NamedArgument($key, $value);
         }
 
-        throw new Exception();
+        throw new ArgumentException('key');
     }
 
     /**

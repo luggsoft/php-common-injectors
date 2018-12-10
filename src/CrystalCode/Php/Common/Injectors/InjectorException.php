@@ -2,10 +2,10 @@
 
 namespace CrystalCode\Php\Common\Injectors;
 
-use CrystalCode\Php\Common\ExceptionBase;
+use Exception;
 use Throwable;
 
-final class InjectorException extends ExceptionBase
+final class InjectorException extends Exception
 {
 
     /**
@@ -15,7 +15,7 @@ final class InjectorException extends ExceptionBase
      */
     public static function getParameterInjectionFailedMessage(string $name)
     {
-        return sprintf('Failed to inject parameter `%s`', $name);
+        return sprintf('Failed to inject parameter "%s"', $name);
     }
 
     /**
@@ -25,7 +25,7 @@ final class InjectorException extends ExceptionBase
      */
     public static function getDefinitionInjectionFailedMessage(string $className)
     {
-        return sprintf('Failed to inject definition `%s`', $className);
+        return sprintf('Failed to inject definition "%s"', $className);
     }
 
     /**

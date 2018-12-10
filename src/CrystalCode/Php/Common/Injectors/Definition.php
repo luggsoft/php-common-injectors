@@ -33,8 +33,11 @@ final class Definition extends DefinitionBase
 
         $classReflection = $this->getClassReflection();
 
-        if (!$classReflection->isInstantiable()) {
-            throw new InjectorException(sprintf('Definition `%s` is not instantiable', $classReflection->getName()));
+        if ($classReflection->isInstantiable() === false) {
+            $message = vsprintf('Definition "%s" is not instantiable', [
+                $classReflection->getName(),
+            ]);
+            throw new InjectorException($message);
         }
 
         return $classReflection->newInstanceArgs($values);
@@ -95,7 +98,10 @@ final class Definition extends DefinitionBase
             return $parameter->getDefaultValue();
         }
 
-        throw new InjectorException(sprintf('Failed to resolve parameter `%s`', $name));
+        $message = vsprintf('Failed to resolve parameter "%s"', [
+            $name,
+        ]);
+        throw new InjectorException($message);
     }
 
 }
