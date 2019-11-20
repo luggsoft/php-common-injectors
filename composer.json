@@ -1,7 +1,8 @@
 {
-    "name": "crystalcode/php-common-injectors",
+    "name": "luggsoft/php-common-injectors",
+    "description": "Luggsoft / PHP Common Injectors",
     "type": "library",
-    "homepage": "https://github.com/crystalcodesoftware/php-common-injectors",
+    "homepage": "https://github.com/luggsoft/php-common-injectors",
     "license": "MIT",
     "authors": [
         {
@@ -11,8 +12,8 @@
     ],
     "require": {
         "php": "^7.2",
-        "crystalcode/php-common": "dev-master",
-        "crystalcode/php-common-collections": "dev-master",
+        "luggsoft/php-common": "dev-master",
+        "luggsoft/php-common-collections": "dev-master",
         "psr/container": "^1.0"
     },
     "require-dev": {
